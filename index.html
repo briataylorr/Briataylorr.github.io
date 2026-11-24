@@ -46,12 +46,12 @@ main section.wrap { padding-top: clamp(64px, 9vw, 128px); }
 
 /* ---------- hero ---------- */
 .hero {
-  display: grid; grid-template-columns: 5fr 7fr; align-items: center;
+  display: grid; grid-template-columns: 7fr 5fr; align-items: center;
   gap: clamp(24px, 5vw, 72px); padding-top: clamp(24px, 4vw, 56px);
 }
 .hero h1 {
   margin: 0; font-weight: 900; font-stretch: 112%;
-  font-size: clamp(3.2rem, 8.2vw, 7rem); line-height: .9; letter-spacing: -.035em;
+  font-size: clamp(3.2rem, 10vw, 8.5rem); line-height: .9; letter-spacing: -.035em;
 }
 .hero .role { font-size: clamp(1.2rem, 2.2vw, 1.6rem); font-weight: 500; margin: 24px 0 8px; }
 .hero .lede { color: var(--muted); max-width: 44ch; margin: 0 0 28px; }
@@ -60,7 +60,8 @@ main section.wrap { padding-top: clamp(64px, 9vw, 128px); }
   text-decoration: none; font-weight: 600;
 }
 .btn:hover { background: var(--pink); color: var(--ink); }
-.hero-photo { position: relative; padding: 0 0 clamp(16px, 2.5vw, 32px) clamp(16px, 2.5vw, 32px); }
+.hero-img { position: relative; display: block; width: 100%; height: auto; }
+.hero-photo { position: relative; max-width: 440px; justify-self: end; width: 100%; padding: 0 0 clamp(16px, 2.5vw, 32px) clamp(16px, 2.5vw, 32px); }
 .hero-photo::before {            /* the pink block behind the photo */
   content: ""; position: absolute; left: 0; bottom: 0; right: clamp(16px, 2.5vw, 32px);
   top: clamp(16px, 2.5vw, 32px); background: var(--pink);
@@ -84,15 +85,15 @@ main section.wrap { padding-top: clamp(64px, 9vw, 128px); }
 .head::after { content: ""; flex: 1; height: 12px; background: var(--pink); }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 2vw, 24px); }
 .grid figure { margin: 0; }
+.grid figure.featured { grid-column: 1 / -1; }
 .grid button.frame { transition: transform .2s ease; }
 .grid button.frame:hover { transform: scale(.985); }
 .grid figcaption { margin-top: 10px; font-size: .95rem; }
 .grid figcaption span { color: var(--muted); }
 
 /* ---------- about ---------- */
-.about { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(24px, 5vw, 72px); align-items: start; }
-.about-photo { width: 100%; height: auto; display: block; }
-.about h3 { margin: 0 0 16px; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 700; line-height: 1.2; text-wrap: balance; }
+.about { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(24px, 5vw, 72px); align-items: start; }
+.about h3 { margin: 0; font-size: clamp(1.6rem, 3.2vw, 2.5rem); font-weight: 800; line-height: 1.12; letter-spacing: -.015em; text-wrap: balance; }
 .about p { max-width: 62ch; margin: 0 0 14px; }
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin: 28px 0 0; padding-top: 20px; border-top: 1px solid var(--line); }
 .facts dt { color: var(--muted); font-size: .9rem; }
@@ -123,7 +124,7 @@ dialog::backdrop { background: rgba(15, 15, 18, .93); }
 
 @media (max-width: 820px) {
   .hero, .about { grid-template-columns: 1fr; }
-  .about-photo { max-width: 360px; }
+  .hero-photo { max-width: 360px; justify-self: start; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lb .frame { height: auto; width: 100%; }
 }
@@ -154,7 +155,7 @@ dialog::backdrop { background: rgba(15, 15, 18, .93); }
       <a class="btn" href="#work">View the work</a>
     </div>
     <div class="hero-photo">
-      <div class="frame r-32" id="hero-frame"><span class="slot"></span></div>
+      <img class="hero-img" src="images/bria.jpg" alt="Bria Taylor" width="1143" height="1600">
     </div>
   </div>
 
@@ -166,9 +167,8 @@ dialog::backdrop { background: rgba(15, 15, 18, .93); }
   <section id="about" class="wrap">
     <div class="head"><h2>About</h2></div>
     <div class="about">
-      <img class="about-photo" src="images/bria.jpg" alt="Bria Taylor" width="1143" height="1600">
+      <h3>Marketing professional and event photographer based in Dallas, Texas.</h3>
       <div>
-        <h3>Marketing professional and event photographer based in Dallas, Texas.</h3>
         <p>Bria is an ambitious, results-driven marketing professional with expertise in digital media, community engagement, leasing and innovative marketing strategies. She has a proven track record in social media management, sales and event planning, and uses analytics to deliver measurable success.</p>
         <p>She is looking to elevate marketing and community initiatives in an entry-level role within a dynamic organization.</p>
         <dl class="facts">
@@ -215,9 +215,8 @@ dialog::backdrop { background: rgba(15, 15, 18, .93); }
    Both are empty for now, so no captions show. Type between the quotes to add one.
    Add or delete lines to add or remove photos from the grid.
    ============================================================ */
-const HERO_PHOTO = "images/10.jpg";   // the large photo at the top
-
 const PHOTOS = [
+  { src: "images/10.jpg", title: "", caption: "", featured: true },   // featured: true makes a photo full width
   { src: "images/12.jpg", title: "", caption: "" },
   { src: "images/02.jpg", title: "", caption: "" },
   { src: "images/07.jpg", title: "", caption: "" },
@@ -249,12 +248,12 @@ function fill(frame, src, alt, label) {
     slot.textContent = label;
   }
 }
-fill(document.getElementById("hero-frame"), HERO_PHOTO, "Photograph by Bria Taylor");
 
 /* Build the grid from the PHOTOS list. */
 const grid = document.getElementById("grid");
 PHOTOS.forEach((p, i) => {
   const fig = document.createElement("figure");
+  if (p.featured) fig.className = "featured";
   const btn = document.createElement("button");
   btn.type = "button"; btn.className = "frame r-32";
   btn.style.setProperty("--g1", GREYS[i % 3][0]);
